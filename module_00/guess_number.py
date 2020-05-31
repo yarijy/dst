@@ -3,12 +3,12 @@ import numpy as np
 
 def score_game(game_core):
     """Запускаем игру 1000 раз, чтобы узнать, как быстро игра угадывает число"""
-    count_ls = []
+    count_ls = []  # Массив с количеством попыток для каждой игры
     np.random.seed(1)  # Фиксируем RANDOM SEED, чтобы ваш эксперимент был воспроизводим!
-    random_array = np.random.randint(1, 101, size=(1000))
-    for number in random_array:
-        count_ls.append(game_core(number))
-    score = int(np.mean(count_ls))
+    random_array = np.random.randint(1, 101, size=(1000))  # Генерируем массив чисел для угадывания
+    for number in random_array:  # Запускаем игру 1000 раз
+        count_ls.append(game_core(number))  # Добавляем количество попыток для текущего запуска игры
+    score = int(np.mean(count_ls))  # Считаем среднее количество попыток для всех запусков игры
     print(f"Ваш алгоритм угадывает число в среднем за {score} попыток")
     return score
 
@@ -16,15 +16,20 @@ def score_game(game_core):
 def game_core_v3(number):
     """Используем алгоритм бинарного поиска для угадывания числа"""
     count = 1
-    predict = 50
-    minimum = 0
-    maximum = 100
+    predict = 50  # Начальное среднее значение из диапазона угадываемых чисел
+    minimum = 0  # Минимальное значение из диапазона угадываемых чисел
+    maximum = 100  # Максимальное значение из диапазона угадываемых чисел
     while number != predict:
         count += 1
         if number > predict:
+            # Если угадываемое число больше текущего среднего значения,
+            # сдвигаем минимум диапазона до среднего значения + 1
             minimum = predict + 1
         else:
+            # Если угадываемое число меньше текущего среднего значения,
+            # сдвигаем максимум диапазона до среднего значения - 1
             maximum = predict - 1
+        # Обновляем среднее значение для получившегося нового диапазона
         predict = (minimum + maximum) // 2
     return count
 
